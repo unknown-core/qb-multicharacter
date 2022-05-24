@@ -83,7 +83,7 @@ RegisterNetEvent('qb-multicharacter:server:loadUserData', function(cData)
         QBCore.Commands.Refresh(src)
         loadHouseData()
         TriggerClientEvent('apartments:client:setupSpawnUI', src, cData)
-        TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(src) .. "** ("..(QBCore.Functions.GetIdentifier(src, 'discord') or 'undefined') .." |  ||"  ..(QBCore.Functions.GetIdentifier(src, 'ip') or 'undefined') ..  "|| | " ..(QBCore.Functions.GetIdentifier(src, QBConfig.Server.Identifier) or 'undefined') .." | " ..cData.citizenid.." | "..src..") loaded..")
+        TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(src) .. "** ("..(QBCore.Functions.GetIdentifier(src, 'discord') or 'undefined') .." |  ||"  ..(QBCore.Functions.GetIdentifier(src, 'ip') or 'undefined') ..  "|| | " ..(QBCore.Functions.GetIdentifier(src, QBCore.Config.Server.Identifier) or 'undefined') .." | " ..cData.citizenid.." | "..src..") loaded..")
 	end
 end)
 
@@ -121,7 +121,7 @@ end)
 
 QBCore.Functions.CreateCallback("qb-multicharacter:server:GetUserCharacters", function(source, cb)
     local src = source
-    local license = QBCore.Functions.GetIdentifier(src, QBConfig.Server.Identifier)
+    local license = QBCore.Functions.GetIdentifier(src, QBCore.Config.Server.Identifier)
 
     MySQL.query('SELECT * FROM players WHERE license = ?', {license}, function(result)
         cb(result)
@@ -136,7 +136,7 @@ end)
 
 QBCore.Functions.CreateCallback("qb-multicharacter:server:GetNumberOfCharacters", function(source, cb)
     local src = source
-    local license = QBCore.Functions.GetIdentifier(src, QBConfig.Server.Identifier)
+    local license = QBCore.Functions.GetIdentifier(src, QBCore.Config.Server.Identifier)
     local numOfChars = 0
 
     if next(Config.PlayersNumberOfCharacters) then
@@ -155,7 +155,7 @@ QBCore.Functions.CreateCallback("qb-multicharacter:server:GetNumberOfCharacters"
 end)
 
 QBCore.Functions.CreateCallback("qb-multicharacter:server:setupCharacters", function(source, cb)
-    local license = QBCore.Functions.GetIdentifier(source, QBConfig.Server.Identifier)
+    local license = QBCore.Functions.GetIdentifier(source, QBCore.Config.Server.Identifier)
     local plyChars = {}
     MySQL.query('SELECT * FROM players WHERE license = ?', {license}, function(result)
         for i = 1, (#result), 1 do

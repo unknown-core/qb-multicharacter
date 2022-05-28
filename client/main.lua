@@ -178,19 +178,83 @@ end)
 --         end)
 --         cb("ok")
 --     end
--- end) replaced by sTREXia
+-- end) replaced by sTREXia (qb-clothing)
+
+-- RegisterNUICallback('cDataPed', function(data)
+--     local cData = data.cData  
+--     SetEntityAsMissionEntity(charPed, true, true)
+--     DeleteEntity(charPed)
+--     if cData ~= nil then
+--         QBCore.Functions.TriggerCallback('qb-multicharacter:server:getSkin', function(data, gender)
+--             model = gender
+--             if model ~= nil then
+--                 Citizen.CreateThread(function()
+--                     RequestModel(model)
+--                     while not HasModelLoaded(model) do
+--                         Citizen.Wait(0)
+--                     end
+--                     charPed = CreatePed(2, model, Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z - 0.98, Config.PedCoords.w, false, true)
+--                     SetPedComponentVariation(charPed, 0, 0, 0, 2)
+--                     FreezeEntityPosition(charPed, false)
+--                     SetEntityInvincible(charPed, true)
+--                     PlaceObjectOnGroundProperly(charPed)
+--                     SetBlockingOfNonTemporaryEvents(charPed, true)
+--                     data = json.decode(data)
+--                     exports['qb-clothes']:setPedAppearance(charPed, data)
+--                 end)
+--             else
+--                 Citizen.CreateThread(function()
+--                     local randommodels = {
+--                         "mp_m_freemode_01",
+--                         "mp_f_freemode_01",
+--                     }
+--                     local model = GetHashKey(randommodels[math.random(1, #randommodels)])
+--                     RequestModel(model)
+--                     while not HasModelLoaded(model) do
+--                         Citizen.Wait(0)
+--                     end
+--                     charPed = CreatePed(2, model, Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z - 0.98, Config.PedCoords.w, false, true)
+--                     SetPedComponentVariation(charPed, 0, 0, 0, 2)
+--                     FreezeEntityPosition(charPed, false)
+--                     SetEntityInvincible(charPed, true)
+--                     PlaceObjectOnGroundProperly(charPed)
+--                     SetBlockingOfNonTemporaryEvents(charPed, true)
+--                 end)
+--             end
+--         end, cData.citizenid)
+--     else
+--         Citizen.CreateThread(function()
+--             local randommodels = {
+--                 "mp_m_freemode_01",
+--                 "mp_f_freemode_01",
+--             }
+--             local model = GetHashKey(randommodels[math.random(1, #randommodels)])
+--             RequestModel(model)
+--             while not HasModelLoaded(model) do
+--                 Citizen.Wait(0)
+--             end
+--             charPed = CreatePed(2, model, Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z - 0.98, Config.PedCoords.w, false, true)
+--             SetPedComponentVariation(charPed, 0, 0, 0, 2)
+--             FreezeEntityPosition(charPed, false)
+--             SetEntityInvincible(charPed, true)
+--             PlaceObjectOnGroundProperly(charPed)
+--             SetBlockingOfNonTemporaryEvents(charPed, true)
+--         end)
+--     end
+-- end) removed by sTREXia (qb-clothes)
+
 RegisterNUICallback('cDataPed', function(data)
-    local cData = data.cData  
+    local cData = data.cData
     SetEntityAsMissionEntity(charPed, true, true)
     DeleteEntity(charPed)
     if cData ~= nil then
-        QBCore.Functions.TriggerCallback('qb-multicharacter:server:getSkin', function(data, gender)
-            model = gender
-            if model ~= nil then
-                Citizen.CreateThread(function()
-                    RequestModel(model)
-                    while not HasModelLoaded(model) do
-                        Citizen.Wait(0)
+        QBCore.Functions.TriggerCallback('qb-multicharacter:server:getSkin', function(skinData)
+            if skinData then
+                local model = skinData.model
+                CreateThread(function()
+                    RequestModel(GetHashKey(model))
+                    while not HasModelLoaded(GetHashKey(model)) do
+                        Wait(10)
                     end
                     charPed = CreatePed(2, model, Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z - 0.98, Config.PedCoords.w, false, true)
                     SetPedComponentVariation(charPed, 0, 0, 0, 2)
@@ -198,11 +262,10 @@ RegisterNUICallback('cDataPed', function(data)
                     SetEntityInvincible(charPed, true)
                     PlaceObjectOnGroundProperly(charPed)
                     SetBlockingOfNonTemporaryEvents(charPed, true)
-                    data = json.decode(data)
-                    exports['qb-clothes']:setPedAppearance(charPed, data)
+                    exports['fivem-appearance']:setPedAppearance(charPed, skinData)
                 end)
             else
-                Citizen.CreateThread(function()
+                CreateThread(function()
                     local randommodels = {
                         "mp_m_freemode_01",
                         "mp_f_freemode_01",
@@ -210,7 +273,7 @@ RegisterNUICallback('cDataPed', function(data)
                     local model = GetHashKey(randommodels[math.random(1, #randommodels)])
                     RequestModel(model)
                     while not HasModelLoaded(model) do
-                        Citizen.Wait(0)
+                        Wait(10)
                     end
                     charPed = CreatePed(2, model, Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z - 0.98, Config.PedCoords.w, false, true)
                     SetPedComponentVariation(charPed, 0, 0, 0, 2)

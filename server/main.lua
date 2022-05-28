@@ -175,13 +175,21 @@ end)
 --     else
 --         cb(nil)
 --     end
--- end) replaced by sTREXia
+-- end) replaced by sTREXia (qb-clothing)
+-- QBCore.Functions.CreateCallback("qb-multicharacter:server:getSkin", function(source, cb, cid)
+--     local result = MySQL.query.await('SELECT * FROM players WHERE citizenid = ?', {cid})
+--     local PlayerData = result[1]
+--     PlayerData.model = json.decode(PlayerData.skin)
+--     if PlayerData.skin ~= nil then
+--         cb(PlayerData.skin, PlayerData.model.model)
+--     else
+--         cb(nil)
+--     end
+-- end) removed by sTREXia (qb-clothes)
 QBCore.Functions.CreateCallback("qb-multicharacter:server:getSkin", function(source, cb, cid)
-    local result = MySQL.query.await('SELECT * FROM players WHERE citizenid = ?', {cid})
-    local PlayerData = result[1]
-    PlayerData.model = json.decode(PlayerData.skin)
-    if PlayerData.skin ~= nil then
-        cb(PlayerData.skin, PlayerData.model.model)
+    local result = MySQL.Sync.fetchAll('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', {cid, 1})
+    if result[1] ~= nil then
+        cb(json.decode(result[1].skin))
     else
         cb(nil)
     end
